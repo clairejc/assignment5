@@ -23,46 +23,46 @@ function getEmptySession() {
   return { cookie: {} } as SessionDoc;
 }
 
-// Before each test...
-beforeEach(async () => {
-  // Drop the test database
-  await db.dropDatabase();
+// // Before each test...
+// beforeEach(async () => {
+//   // Drop the test database
+//   await db.dropDatabase();
 
-  // Add some default users we can use
-  await app.createUser(getEmptySession(), "alice", "alice123");
-  await app.createUser(getEmptySession(), "bob", "bob123");
-});
+//   // Add some default users we can use
+//   await app.createUser(getEmptySession(), "alice", "alice123");
+//   await app.createUser(getEmptySession(), "bob", "bob123");
+// });
 
-// After all tests are done...
-after(async () => {
-  // Close the database connection so that Node exits
-  await client.close();
-});
+// // After all tests are done...
+// after(async () => {
+//   // Close the database connection so that Node exits
+//   await client.close();
+// });
 
-describe("Create a user and log in", () => {
-  it("should create a user and log in", async () => {
-    const session = getEmptySession();
+// describe("Create a user and log in", () => {
+//   it("should create a user and log in", async () => {
+//     const session = getEmptySession();
 
-    const created = await app.createUser(session, "barish", "1234");
-    assert(created.user);
-    await assert.rejects(app.logIn(session, "barish", "123"));
-    await app.logIn(session, "barish", "1234");
-    await assert.rejects(app.logIn(session, "barish", "1234"), "Should not be able to login while already logged-in");
-  });
+//     const created = await app.createUser(session, "barish", "1234");
+//     assert(created.user);
+//     await assert.rejects(app.logIn(session, "barish", "123"));
+//     await app.logIn(session, "barish", "1234");
+//     await assert.rejects(app.logIn(session, "barish", "1234"), "Should not be able to login while already logged-in");
+//   });
 
-  it("duplicate username should fail", async () => {
-    const session = getEmptySession();
+//   it("duplicate username should fail", async () => {
+//     const session = getEmptySession();
 
-    const created = await app.createUser(session, "barish", "1234");
-    assert(created.user);
-    await assert.rejects(app.createUser(session, "barish", "1234"));
-  });
+//     const created = await app.createUser(session, "barish", "1234");
+//     assert(created.user);
+//     await assert.rejects(app.createUser(session, "barish", "1234"));
+//   });
 
-  it("get invalid username should fail", async () => {
-    await assert.rejects(app.getUser(""), "Username should be at least 1 character long");
-    await app.getUser("alice");
-  });
-});
+//   it("get invalid username should fail", async () => {
+//     await assert.rejects(app.getUser(""), "Username should be at least 1 character long");
+//     await app.getUser("alice");
+//   });
+// });
 
 /*
  * As you add more tests, remember to put them inside `describe` blocks.

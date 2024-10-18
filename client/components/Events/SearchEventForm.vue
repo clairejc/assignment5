@@ -2,11 +2,16 @@
 import { ref } from "vue";
 
 const author = ref("");
-const emit = defineEmits(["getPostsByAuthor"]);
+const emit = defineEmits(["getEventsbyAuthor"]);
+
+function resetAuthor() {
+  emit('getEventsbyAuthor', author.value);
+  author.value = "";
+}
 </script>
 
 <template>
-  <form @submit.prevent="emit('getPostsByAuthor', author)" class="pure-form">
+  <form @submit.prevent="resetAuthor" class="pure-form">
     <fieldset>
       <legend>Search by Author</legend>
       <input id="author" type="text" v-model="author" placeholder="Username" />

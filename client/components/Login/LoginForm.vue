@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
+import {useProfileStore} from "@/stores/profile";
 import { ref } from "vue";
 
 const username = ref("");
 const password = ref("");
 const { loginUser, updateSession } = useUserStore();
-
+const { getProfile } = useProfileStore();
 async function login() {
   await loginUser(username.value, password.value);
   void updateSession();
+  void getProfile();
   void router.push({ name: "Home" });
 }
+
 </script>
 
 <template>
