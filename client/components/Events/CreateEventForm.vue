@@ -38,7 +38,7 @@ const emptyForm = () => {
         <input type="description" placeholder="Event description" v-model="description" required />
         <input type="date" placeholder="Event date" v-model="date" required />
         <input type="spots" placeholder="Event spots" v-model="spots" required />
-        <button type="Create Event" class="pure-button pure-button-primary">Create Event</button>
+        <button type="submit" class="pure-button pure-button-primary">Create Event</button>
     </fieldset>
   </form>
 </template>
