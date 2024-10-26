@@ -86,7 +86,7 @@ function toggleInstructions() {
         3. Select which app feature to navigate to. <br>
         4. Profile: Edit your basic user information. <br>
         5. Events: Create events and sign up for events to meet more people who share your interests! <br>
-        6. FriendshipHub: 65+ Create profile and match/chat with friends who share hobbies! <br>
+        6. FriendshipHub: 65+ Create profile and match/chat with friends who share interests! <br>
         7. Settings: Logout of or delete your account.
       </div>
       <div class="instructions-content" v-if="props.pageType === 'login'">

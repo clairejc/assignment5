@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted,  } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useFriendshipsStore } from "@/stores/friendships";
-
+import { storeToRefs } from "pinia";
 
 const bio = ref("");
 const genderPronouns = ref("");
 const { updateSession } = useUserStore();
-const { editFriendshipHubProfile, hasFriendshipProfile, userBio, userPronouns, userInterests } = useFriendshipsStore();
+const { getProfile, editFriendshipHubProfile } = useFriendshipsStore();
+const { userBio, userPronouns} = storeToRefs(useFriendshipsStore());
 
-onMounted(() => {
-  bio.value = userBio; 
-  genderPronouns.value = userPronouns; 
+onMounted(async () => {
+  await getProfile();
+  bio.value = userBio.value; 
+  genderPronouns.value = userPronouns.value; 
 
 });
 

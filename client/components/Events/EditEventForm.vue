@@ -56,11 +56,7 @@ const editEvent = async () => {
       Time:
       <input type="time" v-model="time" />
     </label>
-    <label>
-      Spots left:
-      <input type="number" v-model="spotsLeft" min="0" />
-    </label>
-
+ 
     <!-- Add Event Tag Section -->
     <!-- <label>
       Add Tag:
