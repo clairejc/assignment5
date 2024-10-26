@@ -22,24 +22,35 @@ onBeforeMount(async () => {
 </script>
 
 <template>
+    <!-- <div class="page-background"> -->
+
+    <!-- <img src="@/assets/images/logo.svg" /> -->
+
   <header>
     <nav>
       <div class="title">
-        <img src="@/assets/images/logo.svg" />
+        <img src="@/assets/images/logo.png" />
         <RouterLink :to="{ name: 'Home' }">
-          <h1>Social Media App</h1>
+          <h1>TimelessTalk</h1>
         </RouterLink>
       </div>
-      <ul>
-        <li>
+      <ul class="router-link-group">
+        <li class="router-link">
           <RouterLink :to="{ name: 'Home' }" :class="{ underline: currentRouteName == 'Home' }"> Home </RouterLink>
         </li>
-        <li v-if="isLoggedIn">
+        <li class="router-link" v-if="isLoggedIn">
           <RouterLink :to="{ name: 'Profile' }" :class="{ underline: currentRouteName == 'Profile' }"> Profile </RouterLink>
-          <RouterLink :to="{ name: 'Settings' }" :class="{ underline: currentRouteName == 'Settings' }"> Settings </RouterLink>
+        </li>
+        <li class="router-link" v-if="isLoggedIn">
           <RouterLink :to="{ name: 'Events' }" :class="{ underline: currentRouteName == 'Events' }"> Events </RouterLink>
         </li>
-        <li v-else>
+        <li class="router-link" v-if="isLoggedIn">
+          <RouterLink :to="{ name: 'FriendshipHub' }" :class="{ underline: currentRouteName == 'FriendshipHub' }"> FriendshipHub </RouterLink>
+        </li>
+        <li class="router-link" v-if="isLoggedIn">
+          <RouterLink :to="{ name: 'Settings' }" :class="{ underline: currentRouteName == 'Settings' }"> Settings </RouterLink>
+        </li>
+        <li class="router-link" v-if="!isLoggedIn">
           <RouterLink :to="{ name: 'Login' }" :class="{ underline: currentRouteName == 'Login' }"> Login </RouterLink>
         </li>
       </ul>
@@ -49,19 +60,21 @@ onBeforeMount(async () => {
     </article>
   </header>
   <RouterView />
+  <!-- </div> -->
 </template>
 
 <style scoped>
 @import "./assets/toast.css";
 
 nav {
-  padding: 1em 2em;
-  background-color: lightgray;
+  padding: 0.25em 2em;
+  /* background-color: lightgray; */
+  background-color: var(--primary);
   display: flex;
   align-items: center;
 }
 
-h1 {
+title.h1 {
   font-size: 2em;
   margin: 0;
 }
@@ -94,5 +107,6 @@ ul {
 .underline {
   text-decoration: underline;
 }
+
+
 </style>
-l

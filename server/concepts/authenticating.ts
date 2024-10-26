@@ -46,6 +46,8 @@ export default class AuthenticatingConcept {
     if (user === null) {
       throw new NotFoundError(`User not found!`);
     }
+    console.log("HIIII")
+    console.log(this.redactPassword(user))
     return this.redactPassword(user);
   }
 
@@ -64,6 +66,15 @@ export default class AuthenticatingConcept {
     }
     return user._id;
   }
+
+  async getNameById(_id: ObjectId) {
+    const user = await this.users.readOne({ _id });
+    if (user === null) {
+      throw new NotFoundError(`User not found!`);
+    }
+    return user.name;
+  }
+
 
   async getUsernameById(_id: ObjectId) {
     const user = await this.users.readOne({ _id });

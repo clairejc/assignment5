@@ -8,6 +8,8 @@ import NotFoundView from "../views/NotFoundView.vue";
 import SettingView from "../views/SettingView.vue";
 import ProfileView from "../views/ProfileView.vue";
 import EventsView from "../views/EventsView.vue";
+import FriendshipsView from "../views/FriendshipsView.vue"
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -17,12 +19,7 @@ const router = createRouter({
       name: "Home",
       component: HomeView,
     },
-    {
-      path: "/settings",
-      name: "Settings",
-      component: SettingView,
-      meta: { requiresAuth: true },
-    },
+ 
     {
       path: "/profile",
       name: "Profile",
@@ -35,12 +32,18 @@ const router = createRouter({
       component: EventsView,
       meta: { requiresAuth: true },
     },
-    // {
-    //   path: "/posts",
-    //   name: "Posts",
-    //   component: PostsView,
-    //   meta: { requiresAuth: true },
-    // },
+    {
+      path: "/friendships",
+      name: "FriendshipHub",
+      component: FriendshipsView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/settings",
+      name: "Settings",
+      component: SettingView,
+      meta: { requiresAuth: true },
+    },
     {
       path: "/login",
       name: "Login",

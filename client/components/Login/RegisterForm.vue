@@ -12,6 +12,7 @@ const age = ref();
 const { createUser, loginUser, updateSession } = useUserStore();
 const { getProfile } = useProfileStore();
 
+
 async function register() {
   await createUser(username.value, password.value, name.value, phone.value, age.value);
   await loginUser(username.value, password.value);
@@ -24,15 +25,15 @@ async function register() {
 <template>
   <form class="pure-form pure-form-aligned" @submit.prevent="register">
     <h3>Register User</h3>
-    <fieldset>
+    <fieldset class="register-items">
       <div class="pure-control-group">
-        <label for="aligned-name">Username</label>
-        <input v-model.trim="username" type="text" id="aligned-name" placeholder="Username" required />
+        <label for="aligned-username">Username</label>
+        <input v-model.trim="username" type="uname" id="aligned-username" placeholder="Username" required />
       </div>
 
       <div class="pure-control-group">
         <label for="aligned-password">Password</label>
-        <input type="password" v-model.trim="password" id="aligned-password" placeholder="Password" required />
+        <input type="pass" v-model.trim="password" id="aligned-password" placeholder="Password" required />
       </div>
 
       <div class="pure-control-group">
@@ -50,7 +51,7 @@ async function register() {
         <input type="age" v-model.trim="age" id="aligned-age" placeholder="Age" required />
       </div>
 
-      <div class="pure-controls">
+      <div>
         <button type="submit" class="pure-button pure-button-primary">Register</button>
       </div>
     </fieldset>
@@ -58,8 +59,46 @@ async function register() {
 </template>
 
 <style scoped>
+.register-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pure-control-group {
+  margin: 0px;
+}
+
+button {
+  margin: 4px;
+}
+
 h3 {
   display: flex;
   justify-content: center;
+}
+
+button {
+  padding: 0.5em 1em;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--primary-darker);
+}
+
+input {
+  margin: 12px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input:focus{
+  outline: 1px solid var(--primary);     /* oranges! yey */
 }
 </style>

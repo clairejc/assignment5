@@ -16,7 +16,6 @@ let newLanguage = ref("");
 
 const { updateSession } = useUserStore();
 const { updateUserUsername, updateUserPassword, updateUserName, updateUserLocation, updateUserLanguage, getProfile } = useProfileStore();
-const { currentUsername, currentName, currentLanguage, currentCity, currentState } = storeToRefs(useProfileStore());
 
 async function updateUsername() {
   await updateUserUsername(username.value);
@@ -59,7 +58,7 @@ async function updateLanguage() {
   <form @submit.prevent="updateUsername" class="pure-form">
     <fieldset>
       <legend>Change your username</legend>
-      <input type="text" placeholder="New username" v-model="username" required />
+      <input type="user" placeholder="New username" v-model="username" required />
       <button type="submit" class="pure-button pure-button-primary">Update username</button>
     </fieldset>
   </form>
@@ -67,8 +66,8 @@ async function updateLanguage() {
   <form @submit.prevent="updatePassword" class="pure-form">
     <fieldset>
       <legend>Change your password</legend>
-      <input type="password" placeholder="Old password" v-model="currentPassword" required />
-      <input type="password" placeholder="New password" v-model="newPassword" required />
+      <input type="pass" placeholder="Old password" v-model="currentPassword" required />
+      <input type="pass" placeholder="New password" v-model="newPassword" required />
       <button type="submit" class="pure-button pure-button-primary">Update password</button>
     </fieldset>
   </form>
@@ -90,11 +89,32 @@ async function updateLanguage() {
     </fieldset>
   </form>
 
-  <form @submit.prevent="updateLanguage" class="pure-form">
-    <fieldset>
-      <legend>Change your language</legend>
-      <input type="language" placeholder="New language" v-model="newLanguage" required />
-      <button type="submit" class="pure-button pure-button-primary">Update language</button>
-    </fieldset>
-  </form>
 </template>
+
+<style scoped>
+
+input {
+  margin: 12px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input:focus{
+  outline: 1px solid var(--primary);     /* oranges! yey */
+}
+
+.pure-button {
+  padding: 0.5em 1em;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 12px;
+}
+
+button:hover {
+  background-color: var(--primary-darker);
+}
+</style>

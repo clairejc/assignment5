@@ -25,6 +25,7 @@ export interface FriendshipMessageDoc extends BaseDoc {
 
 export interface FriendshipProfileDoc extends BaseDoc {
   userid: ObjectId;
+  name: string;
   bio: string;
   genderPronouns: string;
   interests: Array<string>;
@@ -51,6 +52,7 @@ export default class FriendingConcept {
     this.messages = new DocCollection<FriendshipMessageDoc>(collectionName + "_messages");
   }
 
+
   async createProfile(userid: ObjectId, bio: string, genderPronouns: string) {
     const interests = Array<string>();
     const profile = await this.profiles.readOne({ userid:userid });
@@ -67,7 +69,11 @@ export default class FriendingConcept {
     if (age < 60) {
       throw new AgeRestrictionError(age);
     }
-    await this.profiles.createOne({ userid, bio, genderPronouns, interests, age});
+
+    const name = user.name;
+
+    await this.profiles.createOne({ userid, name, bio, genderPronouns, interests, age});
+    console.log(this.profiles)
     return {msg: "FriendshipHub profile created!", profile: await this.profiles.readOne({ userid })}
   }
 
@@ -83,6 +89,15 @@ export default class FriendingConcept {
       await this.profiles.partialUpdateOne({ userid:userid }, {genderPronouns:newPronouns});
     }
     return { msg: "FriendshipHub profile updated!", profile: await this.profiles.readOne({ userid })}
+  }
+
+  async getFriendshipProfile(userid: ObjectId) {
+    console.log("hi")
+    const profile = await this.profiles.readOne({ userid });
+    if (!profile) {
+      throw new NotFoundError("Friendship profile not found");
+    }
+    return { profile: profile};
   }
 
   async deleteProfile(userid: ObjectId) {
@@ -107,7 +122,16 @@ export default class FriendingConcept {
     const newinterests = profile.interests;
     newinterests.push(interest);
     await this.profiles.partialUpdateOne({ userid:userid }, {interests: newinterests});    
-    return { msg: "Interest added"};
+    return { newinterests };
+  }
+
+  async getInterests(userid: ObjectId) {
+    const profile = await this.profiles.readOne({ userid });
+    if (!profile) {
+      throw new NotFoundError("Profile not found");
+    }
+    const interests = profile.interests;
+    return { interests };
   }
 
   async removeInterest(userid: ObjectId, interest: string) {
@@ -129,6 +153,7 @@ export default class FriendingConcept {
   }
 
   async getCompatibleFriends(userid: ObjectId) {
+    console.log("GETTING")
     const profile = await this.profiles.readOne({ userid });
     if (!profile) {
       throw new NotFoundError("Profile not found");
@@ -141,24 +166,26 @@ export default class FriendingConcept {
       ]
     };
     const friends = await this.profiles.readMany(filtering);
-    return { msg: "Compatible friends returned!", friends: friends};
+    return { friends};
   }
 
   async sendRequest(from: ObjectId, to: ObjectId, message?: string) {
     await this.canSendRequest(from, to);
     await this.requests.createOne({ from, to, message, status: "pending" });
-    return { msg: "Sent request!" };
+    const m = this.requests.readOne( {from: from, to: to});
+    console.log("from", from, "to", to);
+    return { m };
   }
 
   async acceptRequest(from: ObjectId, to: ObjectId) {
     let message: string = "";
     const request = await this.requests.popOne({from:from, to:to});
-    if (request !== null) {
-      if (request.message !== null) {
-        message = request.message;
-        await this.createMessage(from, to, request.message);
-      }
-    }
+    // if (request !== null) {
+    //   if (request.message !== null) {
+    //     message = request.message;
+    //     await this.createMessage(from, to, request.message);
+    //   }
+    // }
     await Promise.all([this.requests.createOne({ from, to, message, status: "accepted" }), this.addFriend(from, to)]);
     return { msg: "Accepted request!" };
   }
@@ -180,7 +207,7 @@ export default class FriendingConcept {
   }
 
   async sentRequests(user: ObjectId) {
-    return await this.requests.readMany({ from: user});
+    return await this.requests.readMany({ from: user, status: "pending"});
   }
 
   async receivedRequests(user: ObjectId) {
@@ -227,12 +254,12 @@ export default class FriendingConcept {
   }
 
   async getChat(user: ObjectId, user2: ObjectId) {
-    const chat = await this.messages.readMany({ $or: [
+    const chats = await this.messages.readMany({ $or: [
         { from: user, to: user2}, 
         { from: user2, to: user},
       ]
     });
-    return { msg: "chat exchange", chat: chat};
+    return chats;
   }
 
   async createMessage(from: ObjectId, to: ObjectId, content: string) {
@@ -261,6 +288,7 @@ export default class FriendingConcept {
       to: { $in: [u1, u2] },
       status: "pending",
     });
+    console.log("request", request);
     if (request !== null) {
       throw new FriendRequestAlreadyExistsError(u1, u2);
     }
@@ -307,7 +335,7 @@ export class AlreadyAddedInterestError extends NotAllowedError {
   constructor(
     public readonly interest: string,
   ) {
-    super("{filter} has already been added", interest);
+    super("{0} has already been added", interest);
   }
 }
 

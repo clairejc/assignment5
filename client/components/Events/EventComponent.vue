@@ -23,6 +23,7 @@ const deleteEvent = async () => {
   <p> Organizer: {{ props.author.username }}</p>
   <p> Description: {{ props.event.description }}</p>
   <p> Date: {{ props.event.date }}</p>
+  <p> Time: {{ props.event.time }}</p>
   <p> Spots left: {{ props.event.spots - props.event.signups.length }}</p>
 
 

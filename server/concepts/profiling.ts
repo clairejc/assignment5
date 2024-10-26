@@ -151,6 +151,14 @@ export default class ProfilingConcept {
     return profile._id;
   }
 
+  async getProfilebyUserId(userid: ObjectId) {
+    const profile = await this.profiles.readOne({ userid:userid });
+    if (!profile) {
+      throw new NotFoundError("Profile not found");
+    }
+    return profile;
+  }
+
   async addFilter(userid: ObjectId, filter: string) {
     const profile = await this.profiles.readOne({ userid:userid });
     if (!profile) {

@@ -1,39 +1,33 @@
 <script setup lang="ts">
-import router from "@/router";
-import { useUserStore } from "@/stores/user";
-import { useSettingsStore } from "@/stores/settings";
+import { useFriendshipsStore } from "@/stores/friendships";
 import { ref } from "vue";
 
-const { deleteUser } = useSettingsStore();
-const { updateSession } = useUserStore();
-
+const { deleteFriendshipProfile } = useFriendshipsStore();
 const showConfirmation = ref(false); 
 
-async function deleteAcc() {
-  await deleteUser();
-  await updateSession(); // await both to complete before returning
-}
+const emit = defineEmits(['profileDeleted']); // emit after deletion
 
 async function confirmDelete() {
   try {
-    await deleteAcc();
-    router.push({ name: "Home" }); // return to homepage
+    await deleteFriendshipProfile(); 
+    emit('profileDeleted'); 
   } catch (error) {
+    console.error("Failed to delete profile:", error);
   }
 }
-</script>
 
+</script>
 
 <template>
   <div class="deletion-container">
     <div class="button-container">
     <button class="pure-button pure-button-danger" @click="showConfirmation = true">
-      Delete Account
+      Delete Friendship Profile
     </button>
    </div>
 
     <div v-if="showConfirmation" class="confirmation-dialog">
-      <p>Are you sure you want to delete your TimelessTalk account? This action cannot be undone.</p>
+      <p>Are you sure you want to delete your friendship profile? This action cannot be undone.</p>
       <div class="confirmation-buttons">
         <button class="pure-button pure-button-primary" @click="confirmDelete">Yes, delete</button>
         <button class="pure-button pure-button-danger" @click="showConfirmation = false">Cancel</button>
@@ -41,7 +35,6 @@ async function confirmDelete() {
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .deletion-container {

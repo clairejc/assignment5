@@ -8,6 +8,7 @@ export interface EventHostDoc extends BaseDoc {
   title: string;
   description: string;
   date: number;
+  time: string;
   spots: number;
   signups: Array<string>;
   waitlists: Array<string>;
@@ -28,17 +29,20 @@ export default class EventHostingConcept {
     this.events = new DocCollection<EventHostDoc>(collectionName);
   }
 
-  async create(organizer: ObjectId, title: string, description: string, date: number, spots: number) {
-    await this.assertGoodFields(title, description, date, spots);
+  async create(organizer: ObjectId, title: string, description: string, date: number, time: string, spots: number) {
+    await this.assertGoodFields(title, description, date, time, spots);
     const signups = new Array<string>();
     const waitlists = new Array<string>();
     const tags = new Array<string>();
-    const _id = await this.events.createOne({ organizer, title, description, date, spots, signups, waitlists, tags});
+    const _id = await this.events.createOne({ organizer, title, description, date, time, spots, signups, waitlists, tags});
     return { msg: "Event successfully created!", event: await this.events.readOne({ _id }) };
   }
 
-  async update(_id: ObjectId, description: string) {
+  async update(_id: ObjectId, title: string, description: string, date: number) {
     await this.events.partialUpdateOne({ _id }, { description:description });
+    await this.events.partialUpdateOne({ _id }, { title:title });
+    await this.events.partialUpdateOne({ _id }, { date:date });
+
     return { msg: "Event successfully updated!" };
   }
  
@@ -51,8 +55,8 @@ export default class EventHostingConcept {
     return await this.events.readMany({ organizer:organizer });
   }
 
-  private async assertGoodFields(title: string, description: string, date: number, spots: number) {
-    if (!title || !description || !date || !spots) {
+  private async assertGoodFields(title: string, description: string, date: number, time: string, spots: number) {
+    if (!title || !description || !date || !time || !spots) {
       throw new BadValuesError("Title, description, date, spots must be non-empty!");
     }
     await this.assertTitleUnique(title);
@@ -70,7 +74,6 @@ export default class EventHostingConcept {
 
 
   async addTag(_id: ObjectId, tag: string) {
-    console.log("hi")
     if (tag.split(" ").length !== 1) {
       throw new NotAllowedError("Tag has to be one word");
     }
@@ -88,8 +91,6 @@ export default class EventHostingConcept {
 
   async assertOrganizerIsUser(_id: ObjectId, user: ObjectId) {
     const event = await this.events.readOne({ _id:_id });
-    console.log("event exists", event)
-    console.log(this.events)
     if (!event) {
       throw new NotFoundError(`Event ${_id} does not exist!`);
     }
@@ -149,8 +150,8 @@ export default class EventHostingConcept {
     const index = newsignups.indexOf(userid.toString());
     newsignups.splice(index, 1);
     await this.events.partialUpdateOne({ _id:_id }, {signups: newsignups});    
-    
     await Profiling.removeSignup(userid, _id);
+    await this.updateLists(_id);
     return { msg: "Successfully removed event signup!"};
   }
 
@@ -175,13 +176,30 @@ export default class EventHostingConcept {
     return { msg: "Successfully removed event waitlist!"};
   }
 
-  addTaggedEvents(events: EventHostDoc[], otherEvents: EventHostDoc[], filterWords: string[]) {
+  async updateLists(_id: ObjectId) {
+    var event = await this.events.readOne({ _id })
+    if (!event) {
+      throw new NotFoundError("Event not found");
+    }
+    if (event.waitlists.length > 0) {
+      const shift = event.waitlists.shift();
+      if (shift !== undefined) {
+        event.signups.push(shift)
+
+    }
+    await this.events.partialUpdateOne({ _id:_id }, {waitlists: event.waitlists})
+    await this.events.partialUpdateOne({ _id:_id }, {signups: event.signups})
+    return { msg: "Successfully updated signpus and waitlists!"}
+  }
+}
+
+
+  async addTaggedEvents(events: EventHostDoc[], otherEvents: EventHostDoc[], filterWords: string[]) {
     for (var event of otherEvents) {
       if (events.includes(event)) {
         continue;
       }
       const tags = event.tags;
-      console.log(tags);
       if (filterWords.every(word => tags.includes(word))) {
         events.push(event);
       }
@@ -191,7 +209,6 @@ export default class EventHostingConcept {
 
   async addFilter(userid: ObjectId, filter: string) {
     const filterWords = await Profiling.addFilter(userid, filter);
-    console.log(filterWords)
     const filtering = {
       $or: [
         // { tags: { $in: filterWords } }, // Matches if any tag matches a filter word

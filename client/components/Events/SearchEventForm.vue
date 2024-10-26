@@ -12,8 +12,7 @@ function resetAuthor() {
 
 <template>
   <form @submit.prevent="resetAuthor" class="pure-form">
-    <fieldset>
-      <legend>Search by Author</legend>
+    <fieldset class="search-fields">
       <input id="author" type="text" v-model="author" placeholder="Username" />
       <button type="submit" class="pure-button pure-button-primary">Search</button>
     </fieldset>
@@ -21,10 +20,31 @@ function resetAuthor() {
 </template>
 
 <style scoped>
+.search-fields {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
 form {
   display: flex;
   gap: 0.5em;
   padding: 1em;
-  align-items: center;
+  justify-content: center;
+  margin: none;
+}
+
+.pure-button {
+  padding: 0.5em 1em;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 12px;
+}
+
+button:hover {
+  background-color: var(--primary-darker);
 }
 </style>

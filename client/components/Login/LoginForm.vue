@@ -20,16 +20,16 @@ async function login() {
 <template>
   <form class="pure-form pure-form-aligned" @submit.prevent="login">
     <h3>Login</h3>
-    <fieldset>
+    <fieldset class="login-items">
       <div class="pure-control-group">
         <label for="aligned-name">Username</label>
-        <input v-model.trim="username" type="text" id="aligned-name" placeholder="Username" required />
+        <input v-model.trim="username" type="name" id="aligned-name" placeholder="Username" required />
       </div>
       <div class="pure-control-group">
         <label for="aligned-password">Password</label>
-        <input type="password" v-model.trim="password" id="aligned-password" placeholder="Password" required />
+        <input type="pass" v-model.trim="password" id="aligned-password" placeholder="Password" required />
       </div>
-      <div class="pure-controls">
+      <div>
         <button type="submit" class="pure-button pure-button-primary">Submit</button>
       </div>
     </fieldset>
@@ -37,8 +37,46 @@ async function login() {
 </template>
 
 <style scoped>
+.login-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pure-control-group {
+  margin: 0px;
+}
+
+button {
+  margin: 8px 0px 0px 0px;
+}
+
 h3 {
   display: flex;
   justify-content: center;
+}
+
+button {
+  padding: 0.5em 1em;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--primary-darker);
+}
+
+input {
+  margin: 12px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input:focus{
+  outline: 1px solid var(--primary);     /* oranges! yey */
 }
 </style>

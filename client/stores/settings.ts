@@ -15,7 +15,6 @@ export const useSettingsStore = defineStore(
 
     const deleteUser = async () => {
         await fetchy("/api/profiles", "DELETE");
-        console.log('hi')
         currentUsername.value = "";
     };
   
