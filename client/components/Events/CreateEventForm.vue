@@ -4,8 +4,8 @@ import { fetchy } from "../../utils/fetchy";
 
 const title = ref("");
 const description = ref("");
-const date = ref<number | null >(null);
-const time = ref("");
+const date = ref();
+const time = ref();
 const spots = ref<number | null >(null);
 
 const emit = defineEmits(["refreshEvents"]);
