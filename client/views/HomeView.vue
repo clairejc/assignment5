@@ -32,10 +32,16 @@ function goToLogin() {
     <InstructionComponent :pageType="'home'" />
     <section>
       <h1 v-if="isLoggedIn"><br>Welcome {{ currentUsername }}!</h1>
-      <h1 v-if="isLoggedIn"> <br> Get started with something :) <br> <br> </h1>
+      <h1 v-if="isLoggedIn"> <br> Get started with something :) <br> </h1>
+      <div class="instruction-instructions" v-if="isLoggedIn">
+      <em class="instruction-instructions">  (The i button at the top right contains page instructions)</em>
+      </div>
       <div v-else>
         <h1>Please login or register!</h1>
         <br>
+        <div class="instruction-instructions">
+        <em> (The i button at the top right contains page instructions)</em>
+        </div>
         <section class="button-section">
           <button @click="goToLogin"> Login/Register</button>
         </section>
@@ -53,6 +59,16 @@ function goToLogin() {
 </template>
 
 <style scoped>
+.instruction-instructions {
+  em {
+    font-size: 22px;
+  }
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 h1 {
   text-align: center;
 }
