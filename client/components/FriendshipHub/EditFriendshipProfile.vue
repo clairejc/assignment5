@@ -13,16 +13,14 @@ const { userBio, userPronouns} = storeToRefs(friendshipsStore);
 
 onMounted(async () => {
   await getProfile();
-  // bio.value = userBio.value; 
-  // genderPronouns.value = userPronouns.value; 
+  bio.value = userBio.value; 
+  genderPronouns.value = userPronouns.value; 
 
 });
 
 async function create() {
   await editFriendshipHubProfile(bio.value, genderPronouns.value);
   await updateSession();
-  bio.value = "";
-  genderPronouns.value = "";
 }
 
 </script>
@@ -33,12 +31,12 @@ async function create() {
     <fieldset class="edit-friendship-form">
       <div class="pure-control-group">
         <label for="aligned-bio">Bio</label>
-        <input v-model="bio" type="text" id="aligned-bio" :placeholder="userBio" required />
+        <input v-model="bio" type="text" id="aligned-bio" required />
       </div>
 
       <div class="pure-control-group">
         <label for="aligned-genderPronouns">Gender Pronouns</label>
-        <input v-model="genderPronouns" type="text" id="aligned-genderPronouns" :placeholder="userPronouns" required />
+        <input v-model="genderPronouns" type="text" id="aligned-genderPronouns" required />
       </div>
     
 
