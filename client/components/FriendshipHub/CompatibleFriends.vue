@@ -55,6 +55,7 @@ onMounted(() => {
       <p><strong>Name:</strong> {{ currentFriend?.name }}</p>
       <p><strong>Age:</strong> {{ currentFriend?.age }}</p>
       <p><strong>Bio:</strong> {{ currentFriend?.bio }}</p>
+      <p><strong>Gender Pronouns:</strong> {{ currentFriend?.genderPronouns }}</p>
       <p><strong>Interests:</strong> {{ currentFriend?.interests.join(', ') }}</p>
       </div>
       <div class="navigation">

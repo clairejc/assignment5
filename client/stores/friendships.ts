@@ -35,6 +35,10 @@ export const useFriendshipsStore = defineStore(
       });
       userBio.value = bio;
       userPronouns.value = genderPronouns;
+      console.log(userBio.value)
+      console.log(userPronouns.value)
+
+
     };
 
     const deleteFriendshipProfile = async () => {
@@ -57,13 +61,10 @@ export const useFriendshipsStore = defineStore(
 
     const getProfile = async () => {
       try {
-        const { bio, genderPronouns, interests } = await fetchy("/api/friend/profiles", "GET", { alert: false });
-        userBio.value = bio;
-        userPronouns.value = genderPronouns;
-        userInterests.value = interests;
-        console.log(bio.value)
-        console.log(genderPronouns.value)
-
+        const { profile } = await fetchy("/api/friend/profiles", "GET", { alert: false });
+        userBio.value = profile.bio;
+        userPronouns.value = profile.genderPronouns;
+        userInterests.value = profile.interests;
       } catch {
         userBio.value = "";
         userPronouns.value = "";
