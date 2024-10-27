@@ -49,7 +49,9 @@ onMounted(() => {
 
 <template>
   <div>
-    <h3>Compatible Friends</h3>
+    <h3>Compatible Friends </h3>
+    <em> (derived from having an overlapping interest)</em>
+    <br>  <br>
     <div class="compatible-display" v-if="compatibleFriends.length > 0">
       <div class="profile-display">
       <p><strong>Name:</strong> {{ currentFriend?.name }}</p>
